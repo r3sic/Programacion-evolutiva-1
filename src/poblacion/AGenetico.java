@@ -1,5 +1,7 @@
 package poblacion;
 
+import java.util.Arrays;
+
 public class AGenetico {
 	private Poblacion _poblacion;
 	private int _num_max_gen;
@@ -14,45 +16,53 @@ public class AGenetico {
 	private String _seleccion;
 	private String _ejercicio;
 	private int _num_fen;
+	private double _trunk;
 	
-	public AGenetico(int max_gen, double cruce, double mut, double tol, double elitismo, int tam, String seleccion, String ejercicio, int num_fen)  {
+	
+	public AGenetico(int max_gen, double cruce, double mut, double tol, double elitismo, int tam, String seleccion, String ejercicio,double trunk, int num_fen)  {
 		_num_max_gen = max_gen;
+		_tam = tam;
+		_elitismo = elitismo;
 		_gen_actual = 0;
 		_prob_cruce = cruce;
 		_prob_mut = mut;
 		_tolerancia = tol;
 		_num_fen = num_fen;
-		_poblacion = FactoriaPoblaciones.getPoblacion(seleccion, tam, ejercicio , _tolerancia, elitismo, _num_fen);
+		_trunk = trunk;
+		_ejercicio = ejercicio;
+		_seleccion = seleccion;
 	}
 	public AGenetico() {
 		_gen_actual = 0;
 	}
 	
 	public void ejecutaAG(Solucion sol) {
+		_poblacion = FactoriaPoblaciones.getPoblacion(_seleccion, _tam, _ejercicio , _tolerancia,_trunk, _elitismo, _num_fen);
+		_mejorf = new double[_poblacion.getMejorFen().length];
 		_mejor = _poblacion.getMejorApt();
-		_mejorf = _poblacion.getMejorFen();
+		System.arraycopy(_poblacion.getMejorFen(), 0, _mejorf, 0, _mejorf.length);
 		while(_gen_actual < _num_max_gen) {
-			System.out.println(_mejorf+" :"+_mejor +" -> "+_poblacion.getMejorFen() + "  :" + _poblacion.getMejorApt());
+			System.out.println(Arrays.toString(_mejorf)+" :"+_mejor +" -> "+Arrays.toString(_poblacion.getMejorFen()) + "  :" + _poblacion.getMejorApt());
 			_poblacion.seleccion();
 			_poblacion.cruce(_prob_cruce);
 			_poblacion.mutacion(_prob_mut);
 			if(_mejor < _poblacion.getMejorApt()) { 
 				_mejor = _poblacion.getMejorApt();
-				_mejorf = _poblacion.getMejorFen();
+				System.arraycopy(_poblacion.getMejorFen(), 0, _mejorf, 0, _mejorf.length);
 			}
 			sol.add(_mejor, _poblacion.getMejorApt(), _poblacion.media());
 			_gen_actual++;
 		}
-		System.out.println(_mejorf+" :"+_mejor +" -> "+_poblacion.getMejorFen() + "  :" + _poblacion.getMejorApt());
+		System.out.println(Arrays.toString(_mejorf)+" :"+_mejor +" -> "+Arrays.toString(_poblacion.getMejorFen()) + "  :" + _poblacion.getMejorApt());
 	}
 	public void Inicializa() {
-		this._poblacion = FactoriaPoblaciones.getPoblacion(_seleccion, _tam, _ejercicio , _tolerancia, _elitismo, _num_fen);
+		this._poblacion = FactoriaPoblaciones.getPoblacion(_seleccion, _tam, _ejercicio , _tolerancia,_trunk, _elitismo, _num_fen);
 	}
 	public Poblacion get_poblacion() {
 		return _poblacion;
 	}
 	public void set_poblacion() {
-		this._poblacion = FactoriaPoblaciones.getPoblacion(_seleccion, _tam, _ejercicio , _tolerancia, _elitismo, _num_fen);
+		this._poblacion = FactoriaPoblaciones.getPoblacion(_seleccion, _tam, _ejercicio , _tolerancia,_trunk, _elitismo, _num_fen);
 	}
 	public int get_num_max_gen() {
 		return _num_max_gen;
@@ -120,4 +130,17 @@ public class AGenetico {
 	public void set_poblacion(Poblacion _poblacion) {
 		this._poblacion = _poblacion;
 	}
+	public int get_num_fen() {
+		return _num_fen;
+	}
+	public void set_num_fen(int _num_fen) {
+		this._num_fen = _num_fen;
+	}
+	public double get_trunk() {
+		return _trunk;
+	}
+	public void set_trunk(double _trunk) {
+		this._trunk = _trunk;
+	}
+	
 }

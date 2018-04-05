@@ -10,7 +10,7 @@ public class Solucion {
 	public Solucion(int generacion) {
 		_mejor_hist = new double[generacion];
 		_mejor_actual = new double[generacion];
-		_mejor_actual = new double[generacion];
+		_media = new double[generacion];
 		_pos = 0;
 	}
 	

@@ -45,7 +45,7 @@ public class CromosomaF5 extends CromosomaBool{
 	@Override
 	public double aptitud() {
 		// TODO Auto-generated method stub
-		return Funciones.F5(_fenotipo, _num_fen);
+		return -(Funciones.F5(_fenotipo, _num_fen));
 	}
 
 }

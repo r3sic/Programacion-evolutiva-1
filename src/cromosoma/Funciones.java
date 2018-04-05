@@ -23,6 +23,6 @@ public class Funciones {
 		for(int i = 0; i < n;i++) {
 			res += Math.sin(_fenotipo[i]) * Math.pow((Math.sin((i+1)*_fenotipo[i]*_fenotipo[i]/Math.PI)),20);
 		}
-		return res;
+		return -res;
 	}
 }

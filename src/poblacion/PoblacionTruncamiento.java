@@ -10,27 +10,27 @@ import cromosoma.FactoriaCromosoma;
 public class PoblacionTruncamiento<T> extends Poblacion<T> {
 
     private double _trunck;
-    public PoblacionTruncamiento(int tam, String ejercicio, double precision, double trunk, int num_fen) {
-        super(tam, ejercicio, precision, num_fen);
+    public PoblacionTruncamiento(int tam, String ejercicio, double precision, double trunk,double elitismo, int num_fen) {
+        super(tam, ejercicio, precision,elitismo, num_fen);
         _trunck =trunk;
     }
 
     @Override
     public void seleccion() {
-        int pobDistintas = (int) (_trunck*_tam);
+        int pobDistintas = (int) (Math.ceil(_trunck*_tam));
         double puntu = 0;
         int indice_mejores = 0;
         Cromosoma<T>[] padres = new Cromosoma[pobDistintas];
         
         for(int i = 0; i<_tam;i++){
-            if(_pob[i].aptitud() > puntu) {
-		padres[indice_mejores] = _pob[i];
-		if(i+1 < pobDistintas)
+            if(_pob[i].aptitud() > puntu || i < pobDistintas) {
+            	padres[indice_mejores] = FactoriaCromosoma.getCromosomaCopia(_pob[i], _choice, _precision);
+            	if(i+1 < pobDistintas)
                     indice_mejores++;
-		else {
+            	else {
                     indice_mejores = buscarMenor(pobDistintas, padres);
                     puntu = padres[indice_mejores].aptitud();	
-		}
+            	}
             }
         }
         int j=0;
