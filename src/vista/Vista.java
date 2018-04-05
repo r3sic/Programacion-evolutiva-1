@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 import javax.swing.*;
 import javax.swing.JButton;
@@ -61,7 +62,7 @@ public class Vista extends JFrame {
 				AGenetico evolutiva = new AGenetico(algoritmo.get_num_max_gen(), algoritmo.get_prob_cruce(), algoritmo.get_prob_mut(), algoritmo.get_tolerancia(), algoritmo.get_elitismo(), algoritmo.get_tam(), algoritmo.get_seleccion(), algoritmo.get_ejercicio(),algoritmo.get_trunk(), algoritmo.get_num_fen());
 				sol = new Solucion(algoritmo.get_num_max_gen());
 				evolutiva.ejecutaAG(sol);
-				solucion.setText("MEJOR SOLUCION: " + sol.get_mejor_hist()[sol.get_pos()-1]);
+				solucion.setText("MEJOR SOLUCION: " +Arrays.toString(sol.get_fenotipo())+" ("+ sol.get_mejor_hist()[sol.get_pos()-1]+")");
 				grafica(sol);
 			}
 		});

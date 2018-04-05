@@ -53,6 +53,7 @@ public class AGenetico {
 			sol.add(_mejor, _poblacion.getMejorApt(), _poblacion.media());
 			_gen_actual++;
 		}
+		sol.set_fenotipo(_mejorf);
 		//System.out.println(Arrays.toString(_mejorf)+" :"+_mejor +" -> "+Arrays.toString(_poblacion.getMejorFen()) + "  :" + _poblacion.getMejorApt());
 	}
 	public void Inicializa() {
