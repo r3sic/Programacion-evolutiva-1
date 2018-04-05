@@ -9,10 +9,6 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 import javax.swing.*;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import org.math.plot.Plot2DPanel;
 import org.math.plot.*;
@@ -31,9 +27,9 @@ public class Vista extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	JFrame ventana;
 	Plot2DPanel plot;
 	public Vista(){
+		setTitle("Programacion Evolutiva P1");
 		JPanel secondary = new JPanel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
@@ -47,10 +43,11 @@ public class Vista extends JFrame {
 		add(secondary, BorderLayout.WEST);
 		plot = new Plot2DPanel();
 		plot.addLegend("SOUTH");
+		plot.setBorder(BorderFactory.createTitledBorder("Graficas"));
 		add(plot,BorderLayout.CENTER);
 		JButton boton;
 		JTextArea solucion = new JTextArea();
-		solucion.setSize(100,80);
+		solucion.setBorder(BorderFactory.createTitledBorder("Solucion"));
 		add(solucion, BorderLayout.SOUTH);
 		boton = new JButton("Ejecutar");
 		boton.addActionListener(new ActionListener() {
@@ -68,6 +65,7 @@ public class Vista extends JFrame {
 		});
 		boton.setSize(new Dimension(40,40));
 		secondary.add(boton, BorderLayout.SOUTH);
+		secondary.setBorder(BorderFactory.createTitledBorder("Datos"));
 	}
 	
 	public void grafica(Solucion sol) {
@@ -92,17 +90,17 @@ public class Vista extends JFrame {
 		
 		// se pueden añadir las opciones de forma independiente, o "de seguido"; el resultado es el mismo.
 		config.addOption(new IntegerOption<AGenetico>(  // -- entero
-				"MaxGeneracion", 					     // texto a usar como etiqueta del campo
+				"Max Generacion", 					     // texto a usar como etiqueta del campo
 				"Generaciones Maximas",       // texto a usar como 'tooltip' cuando pasas el puntero
 				"_num_max_gen",  						     // campo (espera que haya un getGrosor y un setGrosor)
 				1, Integer.MAX_VALUE))							     // min y max (usa Integer.MIN_VALUE /MAX_VALUE para infinitos)
 			  .addOption(new DoubleOption<AGenetico>(	 // -- eleccion de objeto no-configurable
-			    "ProbCruce",							 // etiqueta 
+			    "Prob Cruce",							 // etiqueta 
 			    "Probalidad de cruce", 					 // tooltip
 			    "_prob_cruce",   							 // campo (debe haber un getColor y un setColor)
 			    0,1))                            // elecciones posibles
 			  .addOption(new DoubleOption<AGenetico>(   // -- doble, parecido a entero
-			    "ProbMutacion", 					 // etiqueta
+			    "Prob Mutacion", 					 // etiqueta
 			    "Probabilidad de mutacion",           // tooltip
 			    "_prob_mut",                     // campo
 			    0, 1 						     // min y max, aplicando factor, si hay; vale usar Double.*_INFINITY) 
