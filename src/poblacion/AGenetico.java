@@ -42,7 +42,7 @@ public class AGenetico {
 		_mejor = _poblacion.getMejorApt();
 		System.arraycopy(_poblacion.getMejorFen(), 0, _mejorf, 0, _mejorf.length);
 		while(_gen_actual < _num_max_gen) {
-			System.out.println(Arrays.toString(_mejorf)+" :"+_mejor +" -> "+Arrays.toString(_poblacion.getMejorFen()) + "  :" + _poblacion.getMejorApt());
+			//System.out.println(Arrays.toString(_mejorf)+" :"+_mejor +" -> "+Arrays.toString(_poblacion.getMejorFen()) + "  :" + _poblacion.getMejorApt());
 			_poblacion.seleccion();
 			_poblacion.cruce(_prob_cruce);
 			_poblacion.mutacion(_prob_mut);
@@ -53,7 +53,7 @@ public class AGenetico {
 			sol.add(_mejor, _poblacion.getMejorApt(), _poblacion.media());
 			_gen_actual++;
 		}
-		System.out.println(Arrays.toString(_mejorf)+" :"+_mejor +" -> "+Arrays.toString(_poblacion.getMejorFen()) + "  :" + _poblacion.getMejorApt());
+		//System.out.println(Arrays.toString(_mejorf)+" :"+_mejor +" -> "+Arrays.toString(_poblacion.getMejorFen()) + "  :" + _poblacion.getMejorApt());
 	}
 	public void Inicializa() {
 		this._poblacion = FactoriaPoblaciones.getPoblacion(_seleccion, _tam, _ejercicio , _tolerancia,_trunk, _elitismo, _num_fen);
