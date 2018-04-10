@@ -33,7 +33,7 @@ public class Vista extends JFrame {
 		JPanel secondary = new JPanel();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
-		AGenetico algoritmo = new AGenetico();
+		AGenetico algoritmo = new AGenetico(50, 0.7, 0.2, 0.0001, 0, 20, "RULETA", "EJ1",0.1, 1);
 		JPanel panelCentral = new JPanel(new GridLayout(3, 2, 4, 4));
 		add(panelCentral, BorderLayout.EAST);
 		ConfigPanel<AGenetico> formulario = creaPanelConfiguracion();
@@ -55,6 +55,7 @@ public class Vista extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Solucion sol;
 				formulario.setTarget(algoritmo);
+				
 				formulario.copyUpdate();
 				AGenetico evolutiva = new AGenetico(algoritmo.get_num_max_gen(), algoritmo.get_prob_cruce(), algoritmo.get_prob_mut(), algoritmo.get_tolerancia(), algoritmo.get_elitismo(), algoritmo.get_tam(), algoritmo.get_seleccion(), algoritmo.get_ejercicio(),algoritmo.get_trunk(), algoritmo.get_num_fen());
 				sol = new Solucion(algoritmo.get_num_max_gen());
@@ -80,9 +81,8 @@ public class Vista extends JFrame {
 		plot.addLinePlot("mejor absoluto", x, sol.get_mejor_hist());
 		plot.addLinePlot("mejor actual", x, sol.get_mejor_actual());
 		plot.addLinePlot("media", x, sol.get_media());
-
+		
 	}
-
 	
 	public ConfigPanel<AGenetico> creaPanelConfiguracion() {
 		

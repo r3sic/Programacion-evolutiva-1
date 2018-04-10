@@ -50,7 +50,10 @@ public class AGenetico {
 				_mejor = _poblacion.getMejorApt();
 				System.arraycopy(_poblacion.getMejorFen(), 0, _mejorf, 0, _mejorf.length);
 			}
-			sol.add(_mejor, _poblacion.getMejorApt(), _poblacion.media());
+			if(_ejercicio == "EJ2" || _ejercicio == "EJ4" || _ejercicio == "EJ5")
+				sol.add(-_mejor,- _poblacion.getMejorApt(), -_poblacion.media());
+			else
+				sol.add(_mejor, _poblacion.getMejorApt(), _poblacion.media());
 			_gen_actual++;
 		}
 		sol.set_fenotipo(_mejorf);
