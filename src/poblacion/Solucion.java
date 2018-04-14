@@ -5,13 +5,12 @@ public class Solucion {
 	private double[] _mejor_hist;
 	private double[] _mejor_actual;
 	private double[] _media;
-	private double[] fenotipo;
 	private int _pos;
 	
 	public Solucion(int generacion) {
 		_mejor_hist = new double[generacion];
 		_mejor_actual = new double[generacion];
-		_media = new double[generacion];
+		_mejor_actual = new double[generacion];
 		_pos = 0;
 	}
 	
@@ -37,10 +36,6 @@ public class Solucion {
 	public int get_pos() {
 		return _pos;
 	}
-	public void set_fenotipo(double[] fen) {
-		fenotipo = fen;
-	}
-	public double[] get_fenotipo() {
-		return fenotipo;
-	}
+	
+	
 }

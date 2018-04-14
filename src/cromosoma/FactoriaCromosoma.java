@@ -1,5 +1,5 @@
 package cromosoma;
-
+/*
 public class FactoriaCromosoma {
 	public static Cromosoma getCromosoma(String choice, double precision, int num_fen) {
 		switch(choice) {
@@ -27,10 +27,9 @@ public class FactoriaCromosoma {
 			return new CromosomaF3((CromosomaF3) c,precision);
 		case("EJ4"):
 			return new CromosomaF4((CromosomaF4) c,precision);
-		case("EJ5"):
-			return new CromosomaF5((CromosomaF5) c,precision);
 		default:
 			return new CromosomaF1(precision);
 		}
 	}
 }
+*/

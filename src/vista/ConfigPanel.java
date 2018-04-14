@@ -529,8 +529,7 @@ public class ConfigPanel<T> extends JPanel {
 		/** reads the value of the model object that is being configured */ 
 		protected Object read() {
 			try {
-				if (pd == null) 
-					pd = getPropertyDescriptor(cp.target.getClass(), fieldName);
+				if (pd == null) pd = getPropertyDescriptor(cp.target.getClass(), fieldName);
 				return pd.getReadMethod().invoke(cp.target);				
 			} catch (Exception e) {
 				throw new RuntimeException("Error reading field " + fieldName, e);

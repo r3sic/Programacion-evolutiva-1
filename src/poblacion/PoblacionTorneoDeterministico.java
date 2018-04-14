@@ -14,8 +14,8 @@ import cromosoma.FactoriaCromosoma;
 public class PoblacionTorneoDeterministico<T> extends Poblacion<T> {
 
     
-    public PoblacionTorneoDeterministico(int tam, String ejercicio, double precision,double elitismo, int num_fen) {
-        super(tam, ejercicio, precision,elitismo, num_fen);
+    public PoblacionTorneoDeterministico(int tam, String ejercicio, double precision, int num_fen) {
+        super(tam, ejercicio, precision, num_fen);
     }
 
     @Override
@@ -31,7 +31,7 @@ public class PoblacionTorneoDeterministico<T> extends Poblacion<T> {
             mejor = (_pob[i].aptitud()>_pob[aux].aptitud())?_pob[i]:_pob[aux];
             padres[i] = FactoriaCromosoma.getCromosomaCopia(mejor, _choice, _precision);
         }
-        System.arraycopy(padres, 0, _pob, 0, _tam);
+        _pob = padres;
     }
     
 }
