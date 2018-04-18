@@ -4,6 +4,56 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class Funciones {
+        public static String traduccion(HashMap<Character, Character> _fenotipo, String texto, HashMap<String, Integer> freq){
+            String trad = "";
+            freq = new HashMap<String, Integer>();
+            int par =0;
+            String aux = "";
+            int i=0;
+            while(i<texto.length()){
+                if(_fenotipo.containsKey(texto.charAt(i))){
+                    trad.concat(_fenotipo.get(texto.charAt(i)).toString());
+                    aux.concat(_fenotipo.get(texto.charAt(i)).toString());
+                    par++;
+                }
+                else{
+                    trad.concat(" ");
+                    par =0;
+                    aux="";
+                }
+                    
+                
+                if(par==2){
+                    if(freq.containsKey(aux))
+                        freq.replace(aux,freq.get(aux)+1);
+                    else
+                        freq.put(aux, 1);
+                    aux="";
+                    par=0;
+                }
+                    
+                
+                i++;
+            }            
+            
+            return trad;
+        }
+        
+        public static double aptitud(HashMap<Character, Character> _fenotipo, String texto, HashMap<String,Integer> mapfreq){
+            HashMap<String, Integer> freq;
+            String trad = traduccion(_fenotipo,texto, freq);
+            double apt = 0.0;
+            String aux1 = "";
+            String aux2 = "";
+            int i = 0;
+            while(i<texto.length()-1){
+                if(texto.charAt(i)==' ') i++; 
+                aux1.concat(texto.substring(i, i+2));
+                aux2.concat(trad.substring(i, i+2));
+                apt += Math.pow(freq.get(aux2)-mapfreq.get(aux2),2); //Cuando el hassMap de traduccion de frecuencias de digramas descomentar y terminar,tal vez dar la vuelta a la resta                
+            }
+            return apt;
+        }
 	/*public static double F1(double[] _fenotipo) {
 		return  20 + Math.E - 20*(Math.pow(Math.E,-0.2*_fenotipo[0])) - Math.pow(Math.E, Math.cos(Math.PI*2*_fenotipo[0]));
 	}
