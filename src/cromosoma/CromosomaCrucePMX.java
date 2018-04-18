@@ -12,7 +12,7 @@ import java.util.Random;
  *
  * @author Carlos
  */
-public class CromosomaCrucePMX extends Cromosoma<Integer>{
+public class CromosomaCrucePMX extends Cromosoma{
 
     @Override
     protected void generaAleatorio() {

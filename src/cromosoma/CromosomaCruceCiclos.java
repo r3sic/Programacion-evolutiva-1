@@ -11,7 +11,7 @@ import java.util.HashSet;
  *
  * @author Carlos
  */
-public class CromosomaCruceCiclos extends Cromosoma<Integer>{
+public class CromosomaCruceCiclos extends Cromosoma{
 
     @Override
     protected void generaAleatorio() {
