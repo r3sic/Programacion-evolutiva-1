@@ -14,15 +14,7 @@ import java.util.Random;
  */
 public class CromosomaCruceOX extends Cromosoma{
 
-    @Override
-    protected void generaAleatorio() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void mutacion(double prob) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 
     @Override
     public void cruce(Cromosoma c2) {
@@ -61,6 +53,10 @@ public class CromosomaCruceOX extends Cromosoma{
             }
             i = (i+1==_longitud)?0:i+1;//sumar al contador y dar la vuelta si es necesario
         }
+        
+        
+        _genes = newCrom1;
+        c2._genes = newCrom2;
     }
     
     

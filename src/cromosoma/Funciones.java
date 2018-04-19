@@ -42,16 +42,20 @@ public class Funciones {
         HashMap<String, Integer> freq = null;
         String trad = traduccion(_fenotipo, texto, freq);
         double apt = 0.0;
-        String aux1 = "";
-        String aux2 = "";
+        String aux1;
+        String aux2;
         int i = 0;
         while (i < texto.length() - 1) {
             if (texto.charAt(i) == ' ') {
                 i++;
             }
+            aux1="";
+            aux2="";
+            
             aux1.concat(texto.substring(i, i + 2));
             aux2.concat(trad.substring(i, i + 2));
             apt += Math.pow(freq.get(aux2) - mapfreq.get(aux2), 2); //Cuando el hassMap de traduccion de frecuencias de digramas descomentar y terminar,tal vez dar la vuelta a la resta                
+            i++;
         }
         return apt;
     }
@@ -80,7 +84,7 @@ public class Funciones {
 		}
 		return res;
 	}*/
-    public static void mutacionInsercion(double prob, Integer[] array) {
+    public static void mutacionInsercion(double prob, int[] array) {
         Random r = new Random();
         boolean encontrado = false;
         double d;
@@ -106,7 +110,7 @@ public class Funciones {
         }
     }
 
-    public static void mutacionIntercambio(double prob, Integer[] array) {
+    public static void mutacionIntercambio(double prob, int[] array) {
         Random r = new Random();
         boolean encontrado = false;
         double d;
@@ -126,7 +130,7 @@ public class Funciones {
         }
     }
 
-    public static void mutacionInversion(double prob, Integer[] array) {
+    public static void mutacionInversion(double prob, int[] array) {
         Random r = new Random();
         double d;
         boolean encontrado = false;
@@ -146,7 +150,7 @@ public class Funciones {
         }
     }
 
-    public static void mutacionHeuristica(double prob, Integer[] array, Cromosoma cromosoma) {
+    public static void mutacionHeuristica(double prob, int[] array, Cromosoma cromosoma) {
         Random r = new Random();
         double d;
         boolean encontrado = false;
@@ -161,8 +165,9 @@ public class Funciones {
             /*a completar*/
         }
     }
-
-    public static void mutacionShuffle(double prob, Integer[] array) {
+    
+    
+    public static void mutacionShuffle(double prob, int[] array) {
         Random r = new Random();
         double d;
         boolean encontrado = false;
@@ -182,7 +187,7 @@ public class Funciones {
         }
     }
 
-    private static void shuffle(int ini, int fin, Integer[] array) {
+    private static void shuffle(int ini, int fin, int[] array) {
         int sub[] = new int[fin - ini + 1];
         for (int i = ini; i <= fin; i++) {
             sub[fin - 1] = array[i];
@@ -200,7 +205,7 @@ public class Funciones {
         }
     }
 
-    private static void invertir(int ini, int fin, Integer[] array) {
+    private static void invertir(int ini, int fin, int[] array) {
         int sub[] = new int[fin - ini + 1];
         for (int i = ini; i <= fin; i++) {
             sub[fin - 1] = array[i];
@@ -210,7 +215,7 @@ public class Funciones {
         }
     }
 
-    private static void rotar(int inicio, int fin, Integer[] array) {
+    private static void rotar(int inicio, int fin, int[] array) {
         int tmp = array[fin];
         for (int i = inicio; i <= fin; i++) {
             int tmp2 = array[i];

@@ -13,16 +13,8 @@ import java.util.HashSet;
  */
 public class CromosomaCruceCiclos extends Cromosoma{
 
-    @Override
-    protected void generaAleatorio() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void mutacion(double prob) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+    
+    
     @Override
     public void cruce(Cromosoma c2) {
         int newCrom1[] = new int[_longitud];
@@ -31,8 +23,8 @@ public class CromosomaCruceCiclos extends Cromosoma{
         HashSet<Integer> setcrom1 = new HashSet<>();
         HashSet<Integer> setcrom2 = new HashSet<>();
         
-        newCrom2[0] = (int) c2._genes[0];
-        setcrom1.add((Integer) c2._genes[0]);
+        newCrom2[0] = c2._genes[0];
+        setcrom1.add( c2._genes[0]);
         
         
         int i=0;
@@ -76,6 +68,9 @@ public class CromosomaCruceCiclos extends Cromosoma{
             if(!setcrom2.contains(newCrom2[i]))
                 newCrom2[i]=_genes[i];
         }
+        
+        _genes = newCrom1;
+        c2._genes = newCrom2;
         
     }
     
