@@ -6,15 +6,24 @@ public abstract class Cromosoma {
 	protected int[] _genes;
 	protected HashMap<Character, Character> _fenotipo;
 	protected int _longitud;
-	protected double[] _const_fenotipo;
-	protected int _num_fen;
+	protected double[] _const_fenotipo;// que es esto?
+	protected int _num_fen;// y esto, por que tenemos tantos fenotipos
         protected double _aptitud;
 	
+        public Cromosoma(){
+            _genes = new int[5];
+            _fenotipo = new HashMap<Character, Character>();
+            _longitud = 5;
+            generaAleatorio();
+            fenotipo();            
+        }
+        
 	public HashMap<Character, Character> fenotipo(){
             HashMap<Character, Character> aux = new HashMap<Character, Character>();
             int a = Character.getNumericValue('a');
             for(int i =0;i<_longitud;i++){
-                aux.put((char) (a+i), (char) _genes[i]);
+                char b = Character.forDigit(i+10, Character.MAX_RADIX);
+                aux.put(b, Character.forDigit(_genes[i]+10, Character.MAX_RADIX));
             }
             _fenotipo = aux;
             return _fenotipo;
@@ -35,9 +44,9 @@ public abstract class Cromosoma {
             }
         
             Random r = new Random();
-            for(int i=_longitud;i>0;i++){
+            for(int i=_longitud;i>0;i--){
                 int posicion = r.nextInt(i);
-                int tmp = (int) _genes[i-1];
+                int tmp = _genes[i-1];
                 _genes[i-1] = _genes[posicion];
                 _genes[posicion] = tmp;
             }
@@ -66,6 +75,10 @@ public abstract class Cromosoma {
             }
 	}
 	public abstract void cruce(Cromosoma c2) ;
+        
+        public HashMap<Character, Character> get_fenotipo(){
+            return _fenotipo;
+        }
         
         
 }

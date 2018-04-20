@@ -16,6 +16,11 @@ public class CromosomaCruceOX extends Cromosoma{
 
     
 
+    public CromosomaCruceOX(){
+        super();
+    }
+    
+    
     @Override
     public void cruce(Cromosoma c2) {
         
@@ -35,8 +40,8 @@ public class CromosomaCruceOX extends Cromosoma{
         }
         
         //cruce cromosoma 1
-        int j= fin;
-        int i= fin;
+        int j= fin==_longitud-1?0:fin+1;
+        int i= fin==_longitud-1?0:fin+1;
         while(j!=ini){
             if(!setcrom1.contains(_genes[i])){
                 newCrom1[j]=_genes[i];
@@ -46,9 +51,11 @@ public class CromosomaCruceOX extends Cromosoma{
         }
         
         // cruce cromosoma 2
+        j= fin==_longitud-1?0:fin+1;
+        i= fin==_longitud-1?0:fin+1;
         while(j!=ini){
             if(!setcrom2.contains(c2._genes[i])){
-                newCrom2[j]=(Integer)c2._genes[i];
+                newCrom2[j]=c2._genes[i];
                 j = (j+1==_longitud)?0:j+1;//sumar al contador y dar la vuelta si es necesario
             }
             i = (i+1==_longitud)?0:i+1;//sumar al contador y dar la vuelta si es necesario

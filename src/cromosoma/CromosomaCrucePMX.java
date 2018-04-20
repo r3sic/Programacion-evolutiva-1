@@ -15,6 +15,10 @@ import java.util.Random;
 public class CromosomaCrucePMX extends Cromosoma{
 
     
+    public CromosomaCrucePMX(){
+        super();
+    }
+    
     @Override
     public void cruce(Cromosoma c2) {
         Random r = new Random();
@@ -22,24 +26,26 @@ public class CromosomaCrucePMX extends Cromosoma{
         int fin = r.nextInt(_longitud-ini)+ini;
         int newCrom1[] = new int[_longitud];
         int newCrom2[] = new int[_longitud];
-        java.lang.System.arraycopy(newCrom1, ini, c2._genes, ini, fin-ini+1);
-        java.lang.System.arraycopy(newCrom2, ini, _genes, ini, fin-ini+1);
+        java.lang.System.arraycopy(c2._genes, ini, newCrom1, ini, fin-ini+1);
+        java.lang.System.arraycopy(_genes, ini, newCrom2, ini, fin-ini+1);
         HashSet<Integer> crom1 = new HashSet<Integer>();
         HashSet<Integer> crom2 = new HashSet<Integer>();
         for (int i =ini;i<=fin;i++){
             crom1.add(newCrom1[i]);
             crom2.add(newCrom2[i]);
         }
-        for(int i =0;i<_longitud;i++){
+        for(int i =0;i<_longitud;i++){            
             if(!crom1.contains(_genes[i]))
                 newCrom1[i]=_genes[i];
             else
-                newCrom1[i]=(int) c2._genes[i];
+                newCrom1[i]= c2._genes[i];
             
             if(!crom2.contains(c2._genes[i]))
-                newCrom1[i]= (int) c2._genes[i];
+                newCrom2[i]= c2._genes[i];
             else
-                newCrom1[i]=_genes[i];
+                newCrom2[i]=_genes[i];
+            
+            i=i+1==ini?fin:i;
         }
         
         

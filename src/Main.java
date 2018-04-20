@@ -1,3 +1,5 @@
+import cromosoma.Cromosoma;
+import cromosoma.CromosomaCrucePMX;
 import poblacion.AGenetico;
 import poblacion.Solucion;
 import vista.Vista;
@@ -6,6 +8,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+                Cromosoma a = new CromosomaCrucePMX();
+                a.mutacion(0.5, "HEURISTICA");
 		int gen = 100;
 		Solucion sol = new Solucion(gen);
 		Vista p = new Vista();

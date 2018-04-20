@@ -5,42 +5,43 @@ import java.util.Random;
 
 public class Funciones {
 
-    public static String traduccion(HashMap<Character, Character> _fenotipo, String texto, HashMap<String, Integer> freq) {
+    public static String traduccion(HashMap<Character, Character> _fenotipo, String texto) {
         String trad = "";
-        freq = new HashMap<String, Integer>();
-        int par = 0;
-        String aux = "";
+        
         int i = 0;
         while (i < texto.length()) {
             if (_fenotipo.containsKey(texto.charAt(i))) {
-                trad.concat(_fenotipo.get(texto.charAt(i)).toString());
-                aux.concat(_fenotipo.get(texto.charAt(i)).toString());
-                par++;
+                trad += _fenotipo.get(texto.charAt(i)).toString();
+                
             } else {
                 trad.concat(" ");
-                par = 0;
-                aux = "";
             }
-
-            if (par == 2) {
-                if (freq.containsKey(aux)) {
-                    freq.replace(aux, freq.get(aux) + 1);
-                } else {
-                    freq.put(aux, 1);
-                }
-                aux = "";
-                par = 0;
-            }
-
             i++;
         }
-
         return trad;
     }
 
+    public static HashMap<String, Integer> InicFreq(String trad){
+        HashMap<String, Integer> freq = new HashMap<String, Integer>();
+        String aux = "";
+        for(int i =0;i<trad.length()-1;i=i+2){
+            aux +=trad.substring(i, i + 2);
+            if(!freq.containsKey(aux))
+                freq.put(aux.toUpperCase(), 1);
+            else
+                freq.replace(aux.toUpperCase(), freq.get(aux)+1);
+            aux="";
+        }
+        
+        return freq;
+    }
+    
+    
     public static double aptitud(HashMap<Character, Character> _fenotipo, String texto, HashMap<String, Integer> mapfreq) {
-        HashMap<String, Integer> freq = null;
-        String trad = traduccion(_fenotipo, texto, freq);
+        
+        String trad = "";
+        trad = traduccion(_fenotipo, texto);
+        HashMap<String, Integer> freq = InicFreq(trad);
         double apt = 0.0;
         String aux1;
         String aux2;
@@ -52,10 +53,10 @@ public class Funciones {
             aux1="";
             aux2="";
             
-            aux1.concat(texto.substring(i, i + 2));
-            aux2.concat(trad.substring(i, i + 2));
-            apt += Math.pow(freq.get(aux2) - mapfreq.get(aux2), 2); //Cuando el hassMap de traduccion de frecuencias de digramas descomentar y terminar,tal vez dar la vuelta a la resta                
-            i++;
+            aux1 +=texto.substring(i, i + 2);
+            aux2 +=trad.substring(i, i + 2);
+            apt += Math.pow(freq.get(aux2.toUpperCase())-mapfreq.get(aux2.toUpperCase()), 2); //Cuando el hassMap de traduccion de frecuencias de digramas descomentar y terminar,tal vez dar la vuelta a la resta                
+            i=i+2;
         }
         return apt;
     }
@@ -161,7 +162,11 @@ public class Funciones {
             i += encontrado ? 0 : 1;
         }
         if (encontrado) {
-            int a = r.nextInt(array.length), b = r.nextInt(array.length);
+            int a = r.nextInt(array.length);
+            int b = r.nextInt(array.length);
+            String asd = "aaaaaaaaaaaaaaaaa";
+            HashMap<String,Integer> map = initializeFrecuencies();
+            aptitud(cromosoma._fenotipo,asd,map);
             /*a completar*/
         }
     }
@@ -190,7 +195,7 @@ public class Funciones {
     private static void shuffle(int ini, int fin, int[] array) {
         int sub[] = new int[fin - ini + 1];
         for (int i = ini; i <= fin; i++) {
-            sub[fin - 1] = array[i];
+            sub[fin - i] = array[i];
         }
         Random rnd = new Random();
         for (int i = sub.length - 1; i > 0; i--) {
@@ -208,7 +213,7 @@ public class Funciones {
     private static void invertir(int ini, int fin, int[] array) {
         int sub[] = new int[fin - ini + 1];
         for (int i = ini; i <= fin; i++) {
-            sub[fin - 1] = array[i];
+            sub[fin - i] = array[i];
         }
         for (int i = 0; i < sub.length; i++) {
             array[i + ini] = sub[i];
@@ -240,7 +245,7 @@ public class Funciones {
 
     public static HashMap<String, Integer> initializeFrecuencies() {
         HashMap<String, Integer> frequencies = new HashMap<String, Integer>();
-
+        
         frequencies.put("AA", 1);
         frequencies.put("AB", 32);
         frequencies.put("AC", 39);

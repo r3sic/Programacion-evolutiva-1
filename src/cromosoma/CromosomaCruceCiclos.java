@@ -5,6 +5,7 @@
  */
 package cromosoma;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -13,7 +14,9 @@ import java.util.HashSet;
  */
 public class CromosomaCruceCiclos extends Cromosoma{
 
-    
+    public CromosomaCruceCiclos(){
+        super();
+    }
     
     @Override
     public void cruce(Cromosoma c2) {
@@ -22,18 +25,15 @@ public class CromosomaCruceCiclos extends Cromosoma{
         
         HashSet<Integer> setcrom1 = new HashSet<>();
         HashSet<Integer> setcrom2 = new HashSet<>();
-        
-        newCrom2[0] = c2._genes[0];
-        setcrom1.add( c2._genes[0]);
-        
-        
+
         int i=0;
         boolean ciclo = false;
         while(!ciclo){
             newCrom1[i] = _genes[i];
+            newCrom2[i] = c2._genes[i];
+            ciclo = setcrom1.contains(_genes[i]);
             setcrom1.add(_genes[i]);
-            int val = (Integer) c2._genes[i];
-            ciclo = setcrom1.contains(val);
+            int val = c2._genes[i];
             int j =0;
             boolean encontrado = ciclo;
             while(j<_longitud && !encontrado){
@@ -43,30 +43,16 @@ public class CromosomaCruceCiclos extends Cromosoma{
             }            
         }
         
-        i=0;
-        ciclo = false;
-        while(!ciclo){
-            newCrom2[i] = (Integer) c2._genes[i];
-            setcrom2.add((Integer) c2._genes[i]);
-            int val = _genes[i];
-            ciclo = setcrom2.contains(val);
-            int j =0;
-            boolean encontrado = ciclo;
-            while(j<_longitud && !encontrado){
-                encontrado=(Integer)c2._genes[j]==val;
-                i=j;
-                j++;                
-            }            
-        }
         
         // fin inicializacion
         
         //cruce
         for(int j =0;j<_longitud;j++){
-            if(!setcrom1.contains(newCrom1[i]))
-                newCrom1[i]=(int) c2._genes[i];
-            if(!setcrom2.contains(newCrom2[i]))
-                newCrom2[i]=_genes[i];
+            if(!setcrom1.contains(_genes[j]))
+                newCrom1[j]=c2._genes[j];            
+            if(!setcrom2.contains(c2._genes[j]))
+                newCrom2[j]=_genes[j];
+            
         }
         
         _genes = newCrom1;
