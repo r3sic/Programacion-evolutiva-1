@@ -18,8 +18,12 @@ public class CromosomaCruceOX extends Cromosoma{
 
     public CromosomaCruceOX(){
         super();
+        _tipoCrom = "OX";
     }
-    
+    public CromosomaCruceOX(Cromosoma c){
+        super(c);
+        _tipoCrom = "OX";
+    }
     
     @Override
     public void cruce(Cromosoma c2) {

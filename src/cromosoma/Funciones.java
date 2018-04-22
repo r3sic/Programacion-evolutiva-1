@@ -26,10 +26,10 @@ public class Funciones {
         String aux = "";
         for(int i =0;i<trad.length()-1;i=i+2){
             aux +=trad.substring(i, i + 2);
-            if(!freq.containsKey(aux))
+            if(!freq.containsKey(aux.toUpperCase()))
                 freq.put(aux.toUpperCase(), 1);
             else
-                freq.replace(aux.toUpperCase(), freq.get(aux)+1);
+                freq.replace(aux.toUpperCase(), freq.get(aux.toUpperCase())+1);
             aux="";
         }
         
@@ -42,7 +42,9 @@ public class Funciones {
         String trad = "";
         trad = traduccion(_fenotipo, texto);
         HashMap<String, Integer> freq = InicFreq(trad);
+        
         double apt = 0.0;
+        double a,b;
         String aux1;
         String aux2;
         int i = 0;
@@ -55,7 +57,9 @@ public class Funciones {
             
             aux1 +=texto.substring(i, i + 2);
             aux2 +=trad.substring(i, i + 2);
-            apt += Math.pow(freq.get(aux2.toUpperCase())-mapfreq.get(aux2.toUpperCase()), 2); //Cuando el hassMap de traduccion de frecuencias de digramas descomentar y terminar,tal vez dar la vuelta a la resta                
+            a =freq.containsKey(aux2.toUpperCase())?freq.get(aux2.toUpperCase()):0;
+            b =mapfreq.containsKey(aux1.toUpperCase())?mapfreq.get(aux1.toUpperCase()):0;
+            apt += Math.pow(a-b, 2); //Cuando el hassMap de traduccion de frecuencias de digramas descomentar y terminar,tal vez dar la vuelta a la resta                
             i=i+2;
         }
         return apt;
@@ -151,22 +155,101 @@ public class Funciones {
         }
     }
 
-    public static void mutacionHeuristica(double prob, int[] array, Cromosoma cromosoma) {
+    public static void mutacionHeuristica(double prob, int[] array, Cromosoma cromosoma,String texto, HashMap<String,Integer> map) {
+        
         Random r = new Random();
         double d;
         boolean encontrado = false;
-        int i = 0;
-        while (!encontrado && i < array.length) {
+        int c = 0;
+        while (!encontrado && c < array.length) {
             d = r.nextDouble();
             encontrado = (d <= prob);
-            i += encontrado ? 0 : 1;
+            c += encontrado ? 0 : 1;
         }
         if (encontrado) {
             int a = r.nextInt(array.length);
+            if (a>c){
+                int aux = a;
+                a=c;
+                c=aux;
+            }
             int b = r.nextInt(array.length);
-            String asd = "aaaaaaaaaaaaaaaaa";
-            HashMap<String,Integer> map = initializeFrecuencies();
-            aptitud(cromosoma._fenotipo,asd,map);
+            if(b>c){
+                int aux = b;
+                b=c;
+                c=aux;
+            }
+            if(a>b){
+                int aux = a;
+                a=b;
+                b=aux;
+            }
+               
+            //a<c b<c a<b          
+           
+            // puesto por debugeo pero tiene que estar fuera en la version final          
+            Cromosoma CromMejor = FactoriaCromosoma.getCromosomaCopia(cromosoma);// cambiarlo a copia, por seguridad. // caso abc
+            Cromosoma CromPrueba = FactoriaCromosoma.getCromosomaCopia(cromosoma);// cambiarlo a copia, por seguridad.
+            double mejoraptitudactual = aptitud(cromosoma._fenotipo,texto,map);
+            double aptitudprueba;
+            // caso acb
+            int aux = CromPrueba._genes[c];
+            CromPrueba._genes[c]=CromPrueba._genes[b];
+            CromPrueba._genes[b]=aux;            
+            aptitudprueba = aptitud(CromPrueba.fenotipo(),texto,map);
+            if(mejoraptitudactual<aptitudprueba){
+                CromMejor=CromPrueba;
+                mejoraptitudactual=aptitudprueba;
+            }
+            //caso bac
+            CromPrueba = FactoriaCromosoma.getCromosomaCopia(cromosoma);
+            aux = CromPrueba._genes[b];
+            CromPrueba._genes[b]=CromPrueba._genes[a];
+            CromPrueba._genes[a]=aux;
+            aptitudprueba = aptitud(CromPrueba.fenotipo(),texto,map);
+            if(mejoraptitudactual<aptitudprueba){
+                CromMejor=CromPrueba;
+                mejoraptitudactual=aptitudprueba;
+            }
+            //caso bca
+            CromPrueba = FactoriaCromosoma.getCromosomaCopia(cromosoma);
+            aux = CromPrueba._genes[b];
+            CromPrueba._genes[b]=CromPrueba._genes[a];
+            CromPrueba._genes[a]=aux;
+            aux = CromPrueba._genes[b];
+            CromPrueba._genes[b]=CromPrueba._genes[c];
+            CromPrueba._genes[c]=aux;
+            aptitudprueba = aptitud(CromPrueba.fenotipo(),texto,map);
+            if(mejoraptitudactual<aptitudprueba){
+                CromMejor=CromPrueba;
+                mejoraptitudactual=aptitudprueba;
+            }
+            
+            //caso cab
+            CromPrueba = FactoriaCromosoma.getCromosomaCopia(cromosoma);
+            aux = CromPrueba._genes[b];
+            CromPrueba._genes[b]=CromPrueba._genes[a];
+            CromPrueba._genes[a]=aux;
+            aux = CromPrueba._genes[a];
+            CromPrueba._genes[a]=CromPrueba._genes[c];
+            CromPrueba._genes[c]=aux;
+            aptitudprueba = aptitud(CromPrueba.fenotipo(),texto,map);
+            if(mejoraptitudactual<aptitudprueba){
+                CromMejor=CromPrueba;
+                mejoraptitudactual=aptitudprueba;
+            }
+            //caso cab
+            CromPrueba = FactoriaCromosoma.getCromosomaCopia(cromosoma);
+            aux = CromPrueba._genes[c];
+            CromPrueba._genes[c]=CromPrueba._genes[a];
+            CromPrueba._genes[a]=aux;
+            aptitudprueba = aptitud(CromPrueba.fenotipo(),texto,map);
+            if(mejoraptitudactual<aptitudprueba){
+                CromMejor=CromPrueba;
+                mejoraptitudactual=aptitudprueba;
+            }
+            cromosoma=CromMejor;
+            
             /*a completar*/
         }
     }

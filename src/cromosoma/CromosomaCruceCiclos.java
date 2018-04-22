@@ -16,8 +16,13 @@ public class CromosomaCruceCiclos extends Cromosoma{
 
     public CromosomaCruceCiclos(){
         super();
+        _tipoCrom = "CICLOS";
     }
     
+    public CromosomaCruceCiclos(Cromosoma c){
+        super(c);
+        _tipoCrom = "CICLOS";
+    }
     @Override
     public void cruce(Cromosoma c2) {
         int newCrom1[] = new int[_longitud];

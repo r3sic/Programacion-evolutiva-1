@@ -4,6 +4,8 @@ import java.util.Random;
 
 import cromosoma.Cromosoma;
 import cromosoma.FactoriaCromosoma;
+import static cromosoma.Funciones.initializeFrecuencies;
+import java.util.HashMap;
 
 public abstract class Poblacion<T>{
 	protected Cromosoma<T>[] _pob;
@@ -16,8 +18,10 @@ public abstract class Poblacion<T>{
 	protected int _tam;
 	protected String _choice;
 	protected double _precision;
-	
+	protected HashMap<String,Integer> _map;
+        
 	public Poblacion(int tam, String ejercicio, double precision, int num_fen) {
+                HashMap<String,Integer> _map = initializeFrecuencies();
 		_choice = ejercicio;
 		_precision = precision;
 		_tam = tam;

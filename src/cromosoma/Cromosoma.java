@@ -9,6 +9,7 @@ public abstract class Cromosoma {
 	protected double[] _const_fenotipo;// que es esto?
 	protected int _num_fen;// y esto, por que tenemos tantos fenotipos
         protected double _aptitud;
+        protected String _tipoCrom;
 	
         public Cromosoma(){
             _genes = new int[5];
@@ -17,9 +18,19 @@ public abstract class Cromosoma {
             generaAleatorio();
             fenotipo();            
         }
+        public Cromosoma(Cromosoma crom){
+            _genes = new int[crom._longitud];
+            _longitud = crom._longitud;
+            System.arraycopy(crom._genes, 0, _genes, 0, _longitud);
+            _fenotipo = new HashMap<Character, Character>();
+            _fenotipo.putAll(crom._fenotipo);
+            
+            
+        }
         
 	public HashMap<Character, Character> fenotipo(){
             HashMap<Character, Character> aux = new HashMap<Character, Character>();
+            aux.put(' ', ' ');
             int a = Character.getNumericValue('a');
             for(int i =0;i<_longitud;i++){
                 char b = Character.forDigit(i+10, Character.MAX_RADIX);
@@ -52,7 +63,7 @@ public abstract class Cromosoma {
             }
 	}
         
-	public void mutacion(double prob, String tipo) {
+	public void mutacion(double prob, String tipo, String texto, HashMap map) {
             switch(tipo){
                 case "INSERCION": 
                     Funciones.mutacionInsercion(prob, _genes);
@@ -67,7 +78,7 @@ public abstract class Cromosoma {
                     Funciones.mutacionShuffle(prob, _genes);
                     break;
                 case "HEURISTICA": 
-                    Funciones.mutacionHeuristica(prob, _genes, this);
+                    Funciones.mutacionHeuristica(prob, _genes, this, texto,map);
                     break;
                 default:
                     Funciones.mutacionInsercion(prob, _genes);

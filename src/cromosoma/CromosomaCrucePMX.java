@@ -17,8 +17,13 @@ public class CromosomaCrucePMX extends Cromosoma{
     
     public CromosomaCrucePMX(){
         super();
+        _tipoCrom = "PMX";
     }
     
+    public CromosomaCrucePMX(Cromosoma c){
+        super(c);
+        _tipoCrom = "PMX";
+    }
     @Override
     public void cruce(Cromosoma c2) {
         Random r = new Random();
