@@ -19,15 +19,15 @@ import cromosoma.FactoriaCromosoma;
 public class PoblacionTorneoProbabilistico<T> extends Poblacion<T> {
 
     private double _prob;
-    public PoblacionTorneoProbabilistico(int tam, String ejercicio, double precision, double trunk, int num_fen) {
-        super(tam, ejercicio, precision, num_fen);
+    public PoblacionTorneoProbabilistico(int tam, String ejercicio,double elitismo, double trunk, int num_fen, String texto, String choice_mut) {
+        super(tam, ejercicio, elitismo, texto,choice_mut);
         _prob = trunk;
     }
 
     @Override
     public void seleccion() {
-        Cromosoma<T>[] padres = new Cromosoma[_tam];
-        Cromosoma<T> mejor;
+        Cromosoma[] padres = new Cromosoma[_tam];
+        Cromosoma mejor;
         Random r = new Random();
         int aux;
         double ran;
@@ -37,9 +37,9 @@ public class PoblacionTorneoProbabilistico<T> extends Poblacion<T> {
             }while(aux!=i);
             ran = r.nextDouble();
             mejor = (ran<=_prob)?_pob[i]:_pob[aux];
-            padres[i] = FactoriaCromosoma.getCromosomaCopia(mejor, _choice, _precision);
+            padres[i] = FactoriaCromosoma.getCromosomaCopia(mejor);
         }
-        _pob = padres;
+        System.arraycopy(padres, 0, _pob, 0, _tam);
     }
     
 }

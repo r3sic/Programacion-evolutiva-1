@@ -10,8 +10,8 @@ import cromosoma.FactoriaCromosoma;
 public class PoblacionTruncamiento<T> extends Poblacion<T> {
 
     private double _trunck;
-    public PoblacionTruncamiento(int tam, String ejercicio, double precision, double trunk, int num_fen) {
-        super(tam, ejercicio, precision, num_fen);
+    public PoblacionTruncamiento(int tam, String ejercicio, double elitismo, double trunk, String texto, String choice_mut) {
+        super(tam, ejercicio,elitismo, texto, choice_mut);
         _trunck =trunk;
     }
 
@@ -20,22 +20,21 @@ public class PoblacionTruncamiento<T> extends Poblacion<T> {
         int pobDistintas = (int) (_trunck*_tam);
         double puntu = 0;
         int indice_mejores = 0;
-        Cromosoma<T>[] padres = new Cromosoma[pobDistintas];
-        
+        Cromosoma[] padres = new Cromosoma[pobDistintas];
         for(int i = 0; i<_tam;i++){
-            if(_pob[i].aptitud() > puntu) {
-		padres[indice_mejores] = _pob[i];
+            if(_pob[i].aptitud(_mensaje_cifrado,_map) > puntu || i < pobDistintas) {
+            		padres[indice_mejores] = FactoriaCromosoma.getCromosomaCopia(_pob[i]);
 		if(i+1 < pobDistintas)
                     indice_mejores++;
 		else {
                     indice_mejores = buscarMenor(pobDistintas, padres);
-                    puntu = padres[indice_mejores].aptitud();	
+                    puntu = padres[indice_mejores].aptitud(_mensaje_cifrado,_map);	
 		}
             }
         }
         int j=0;
         for(int i = 0; i<_tam;i++){
-            _pob[i] = FactoriaCromosoma.getCromosomaCopia(padres[j], _choice, _precision);
+            _pob[i] = FactoriaCromosoma.getCromosomaCopia(padres[j]);
             j = (j+1)==pobDistintas?0:j+1;
         }
         

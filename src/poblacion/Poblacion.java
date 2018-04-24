@@ -4,12 +4,12 @@ import java.util.Random;
 
 import cromosoma.Cromosoma;
 import cromosoma.FactoriaCromosoma;
-import static cromosoma.Funciones.initializeFrecuencies;
+import cromosoma.Funciones;
 import java.util.HashMap;
 
 public abstract class Poblacion<T>{
-	protected Cromosoma<T>[] _pob;
-	protected Cromosoma<T>[] _mejores;
+	protected Cromosoma[] _pob;
+	protected Cromosoma[] _mejores;
 	protected int _num_mejores;
 	protected int _pos_mejor;
 	protected double[] _puntuacion;
@@ -17,15 +17,21 @@ public abstract class Poblacion<T>{
 	protected double[] _punt_acum;
 	protected int _tam;
 	protected String _choice;
-	protected double _precision;
-	protected HashMap<String,Integer> _map;
+	protected String _choice_mut;
+	protected String _mensaje_cifrado;
+	protected HashMap<String,Double> _map;
+	private boolean _hayElitismo;
         
-	public Poblacion(int tam, String ejercicio, double precision, int num_fen) {
-                HashMap<String,Integer> _map = initializeFrecuencies();
-		_choice = ejercicio;
-		_precision = precision;
+	public Poblacion(int tam, String cruce,double elitismo, String texto, String choice_mut) {
+		_mensaje_cifrado = Funciones.leerTexto(texto);
+        _mensaje_cifrado = _mensaje_cifrado.toLowerCase();
+		_map = Funciones.leerDigram();
+		_map.putAll(Funciones.leerTrigram());
+		_choice = cruce;
+		_choice_mut = choice_mut;
 		_tam = tam;
-		_num_mejores = (int) Math.ceil((_tam/100.0)*2.0);
+		_num_mejores = (elitismo > 0.0)?(int) Math.ceil(_tam*elitismo): 1;
+		_hayElitismo = (elitismo > 0.0);
 		_suma_aptitud = 0;
 		_pob = new Cromosoma[_tam];
 		_mejores = new Cromosoma[_num_mejores];
@@ -36,22 +42,21 @@ public abstract class Poblacion<T>{
 		int indice_mejores = 0;
 		//generar poblaciones
 		for(int i = 0; i < _tam;i++) {
-			_pob[i] = FactoriaCromosoma.getCromosoma(_choice,_precision, num_fen);
-			apt = _pob[i].aptitud();
-			if(apt > puntu) {
-				_mejores[indice_mejores] = FactoriaCromosoma.getCromosomaCopia(_pob[i],_choice,_precision);
+			_pob[i] = FactoriaCromosoma.getCromosoma(_choice);
+			apt = _pob[i].aptitud(_mensaje_cifrado,_map);
+			if(apt > puntu|| i < _num_mejores) {
+				_mejores[indice_mejores] = FactoriaCromosoma.getCromosomaCopia(_pob[i]);
 				if(i+1 < _num_mejores)
 					indice_mejores++;
 				else {
 					indice_mejores = buscarMenor(_num_mejores, _mejores);
-					puntu = _mejores[indice_mejores].aptitud();	
+					puntu = _mejores[indice_mejores].aptitud(_mensaje_cifrado,_map);	
 				}
 			}
 			_puntuacion[i] = apt;
 			_suma_aptitud += apt;
 			_punt_acum[i] = _suma_aptitud;
 		}
-		_pos_mejor = buscarMejorTotal();
 	}
 
 	public abstract void seleccion(); 
@@ -74,45 +79,49 @@ public abstract class Poblacion<T>{
 	}
 
 	public void mutacion(double prob) {
-		for(int i = 0; i < _tam; i++) {
-			_pob[i].mutacion(prob);
-		}
-		for(int i = 0; i < _num_mejores; i++) {
-			_pob[buscarMenor(_tam, _pob)] = _mejores[i];
+		for(int i = 0; i < _tam; i++)
+			_pob[i].mutacion(prob, _choice_mut, _mensaje_cifrado, _map);
+	}
+	
+	public void seleccionElitismo() {
+		if(_hayElitismo) {
+			for(int i = 0; i < _num_mejores; i++) {
+				_pob[buscarMenor(_tam, _pob)] = FactoriaCromosoma.getCromosomaCopia(_mejores[i]);
+			}
 		}
 		_suma_aptitud = 0;
 		int indice_mejores = buscarMenor(_num_mejores, _mejores);
-		double puntu = _mejores[indice_mejores].aptitud();
+		double puntu = _mejores[indice_mejores].aptitud(_mensaje_cifrado,_map);
 		for(int i = 0; i < _tam; i++) {
-			if(_pob[i].aptitud() > puntu) {
-				_mejores[indice_mejores] = FactoriaCromosoma.getCromosomaCopia(_pob[i],_choice,_precision);;
+			if(_pob[i].aptitud(_mensaje_cifrado,_map) > puntu) {
+				_mejores[indice_mejores] = FactoriaCromosoma.getCromosomaCopia(_pob[i]);
 				indice_mejores = buscarMenor(_num_mejores, _mejores);
-				puntu = _mejores[indice_mejores].aptitud();
+				puntu = _mejores[indice_mejores].aptitud(_mensaje_cifrado,_map);
 			}
-			_puntuacion[i] = _pob[i].aptitud();
+			_pob[i].fenotipo();
+			_puntuacion[i] = _pob[i].aptitud(_mensaje_cifrado,_map);
 			_suma_aptitud += _puntuacion[i];
 			_punt_acum[i] = _suma_aptitud;
 		}
-		_pos_mejor = buscarMejorTotal();
 	}
 	
-	public double[] getMejorFen() {
-		return _mejores[_pos_mejor].fenotipo();
+	public HashMap<Character, Character> getMejorFen() {
+		return _pob[buscarMejor(_tam,_pob)].fenotipo();
 	}
 	public double getMejorApt() {
-		return _mejores[_pos_mejor].aptitud();
+		return _pob[buscarMejor(_tam,_pob)].aptitud(_mensaje_cifrado,_map);
 	}
 	protected int buscarMenor(int tam, Cromosoma[] array) {
 		int menor_act = 0;
 		for(int i = 1; i < tam;i++)
-			if(array[i].aptitud() < array[menor_act].aptitud())
+			if(array[i].aptitud(_mensaje_cifrado,_map) < array[menor_act].aptitud(_mensaje_cifrado,_map))
 				menor_act = i;
 		return menor_act;
 	}
-	private int buscarMejorTotal() {
+	private int buscarMejor(int tam, Cromosoma[] array) {
 		int mejor_act = 0;
-		for(int i = 1; i < _num_mejores;i++)
-			if(_mejores[i].aptitud() > _mejores[mejor_act].aptitud())
+		for(int i = 1; i < tam;i++)
+			if(array[i].aptitud(_mensaje_cifrado,_map) > array[mejor_act].aptitud(_mensaje_cifrado,_map))
 				mejor_act = i;
 		return mejor_act;
 	}
@@ -120,5 +129,9 @@ public abstract class Poblacion<T>{
 	public double media() {
 		// TODO Auto-generated method stub
 		return _suma_aptitud/_tam;
+	}
+
+	public String get_mensaje_cifrado() {
+		return _mensaje_cifrado;
 	}
 }

@@ -1,100 +1,194 @@
 package cromosoma;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class Funciones {
 
+	public static HashMap<String, Double> leerDigram(){
+		HashMap<String, Double> mapa = new HashMap<String, Double>();
+		try {
+			String line;
+			double suma = 0.0;
+			BufferedReader in = new BufferedReader(new FileReader("english_bigrams.txt"));
+			BufferedReader in2 = new BufferedReader(new FileReader("english_bigrams.txt"));
+			while((line = in2.readLine()) != null)
+				suma+=Integer.parseInt(line.substring(line.indexOf(" ")+1));
+			while((line = in.readLine()) != null) {
+				line.indexOf(" ");
+				mapa.put(line.substring(0,line.indexOf(" ")), (Double.valueOf(line.substring(line.indexOf(" ")+1)))/suma);
+			}
+			in.close();
+			in2.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return mapa;
+	}
+	public static HashMap<String, Double> leerTrigram(){
+		HashMap<String, Double> mapa = new HashMap<String, Double>();
+		try {
+			String line;
+			double suma = 1.0;
+			BufferedReader in = new BufferedReader(new FileReader("english_trigrams.txt"));
+			BufferedReader in2 = new BufferedReader(new FileReader("english_trigrams.txt"));
+			while((line = in2.readLine()) != null)
+				suma+=Integer.parseInt(line.substring(line.indexOf(" ")+1));
+			while((line = in.readLine()) != null) {
+				line.indexOf(" ");
+				mapa.put(line.substring(0,line.indexOf(" ")), (Double.valueOf(line.substring(line.indexOf(" ")+1)))/suma);
+			}
+			in.close();
+			in2.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return mapa;
+	}
+	
+	public static String leerTexto(String texto) {
+		String cadena = "", line, archivo;
+		switch(texto) {
+		case "uno":
+			archivo = "Uno.txt";
+			break;
+		case "dos":
+			archivo = "Dos.txt";
+			break;
+		case "tres":
+			archivo = "Tres.txt";
+			break;
+		case "cuatro":
+			archivo = "cuatro.txt";
+			break;
+		default:
+			archivo = "uno.txt";
+		}
+		try {
+			BufferedReader in = new BufferedReader(new FileReader(archivo));
+			while((line = in.readLine()) != null)
+				cadena += line;
+			in.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return cadena;
+	}
     public static String traduccion(HashMap<Character, Character> _fenotipo, String texto) {
         String trad = "";
-        
+        String text2 = texto.toLowerCase();
         int i = 0;
-        while (i < texto.length()) {
-            if (_fenotipo.containsKey(texto.charAt(i))) {
-                trad += _fenotipo.get(texto.charAt(i)).toString();
+        while (i < text2.length()) {
+            if (_fenotipo.containsKey(text2.charAt(i))) {
+                trad += _fenotipo.get(text2.charAt(i)).toString();
                 
             } else {
-                trad.concat(" ");
+                trad.concat(String.valueOf(text2.charAt(i)));
             }
             i++;
         }
         return trad;
     }
 
-    public static HashMap<String, Integer> InicFreq(String trad){
-        HashMap<String, Integer> freq = new HashMap<String, Integer>();
+    public static HashMap<String, Double> InicFreq(String trad, HashMap<String,Double> mapa_t){
+        HashMap<String, Double> freq = new HashMap<String, Double>();
         String aux = "";
-        for(int i =0;i<trad.length()-1;i=i+2){
-            aux +=trad.substring(i, i + 2);
-            if(!freq.containsKey(aux.toUpperCase()))
-                freq.put(aux.toUpperCase(), 1);
+        int i = 0;
+        while(i<trad.length()-2){
+            aux =trad.substring(i, i + 2);
+            if(mapa_t.containsKey(aux.toUpperCase())) {
+	            if(!freq.containsKey(aux.toUpperCase()))
+	                freq.put(aux.toUpperCase(), 1.0/(trad.length()));
+	            else
+	                freq.replace(aux.toUpperCase(), (freq.get(aux.toUpperCase())+(1.0/(trad.length()))));
+	            i = i+2;
+            }
             else
-                freq.replace(aux.toUpperCase(), freq.get(aux.toUpperCase())+1);
-            aux="";
+            	i++;
+        }
+        while(i<trad.length()-3){
+            aux =trad.substring(i, i + 3);
+            if(mapa_t.containsKey(aux.toUpperCase())) {
+	            if(!freq.containsKey(aux.toUpperCase()))
+	                freq.put(aux.toUpperCase(), 1.0/(trad.length()));
+	            else
+	                freq.replace(aux.toUpperCase(), (freq.get(aux.toUpperCase())+(1.0/(trad.length()))));
+	            i = i+3;
+            }
+            else
+            	i++;
         }
         
         return freq;
     }
     
     
-    public static double aptitud(HashMap<Character, Character> _fenotipo, String texto, HashMap<String, Integer> mapfreq) {
+    public static double aptitud(HashMap<Character, Character> _fenotipo, String texto, HashMap<String, Double> mapfreq) {
         
         String trad = "";
         trad = traduccion(_fenotipo, texto);
-        HashMap<String, Integer> freq = InicFreq(trad);
-        
+        HashMap<String, Double> freq = InicFreq(trad, mapfreq);
         double apt = 0.0;
         double a,b;
-        String aux1;
-        String aux2;
+        double[] arr = new double[freq.size()];
+        double suma_total = 0;
         int i = 0;
-        while (i < texto.length() - 1) {
+        
+        for(Map.Entry<String, Double> entrada : freq.entrySet()) {
+        	a = entrada.getValue();
+        	arr[i] = (mapfreq.containsKey(entrada.getKey()))?mapfreq.get(entrada.getKey()):0;
+        	suma_total += arr[i];
+        	i++;	
+        }/*
+        for(int j = 0; j < i; j++) {
+        	arr[j] /= suma_total;
+        }*/
+        i = 0;
+        for(Map.Entry<String, Double> entrada : freq.entrySet()) {
+        	a = entrada.getValue();
+        	b = (mapfreq.containsKey(entrada.getKey()))?mapfreq.get(entrada.getKey()):0;
+        	//i++;
+        	apt += Math.pow(a-b,2);
+        }
+        /*
+        while (i < texto.length() - 3) {
             if (texto.charAt(i) == ' ') {
                 i++;
             }
-            aux1="";
-            aux2="";
-            
+            else {
+            String aux1="";
+            String aux2="";
             aux1 +=texto.substring(i, i + 2);
             aux2 +=trad.substring(i, i + 2);
+            
             a =freq.containsKey(aux2.toUpperCase())?freq.get(aux2.toUpperCase()):0;
             b =mapfreq.containsKey(aux1.toUpperCase())?mapfreq.get(aux1.toUpperCase()):0;
             apt += Math.pow(a-b, 2); //Cuando el hassMap de traduccion de frecuencias de digramas descomentar y terminar,tal vez dar la vuelta a la resta                
             i=i+2;
-        }
-        return apt;
+            }
+        }*/
+        return -apt;
     }
-
-    /*public static double F1(double[] _fenotipo) {
-		return  20 + Math.E - 20*(Math.pow(Math.E,-0.2*_fenotipo[0])) - Math.pow(Math.E, Math.cos(Math.PI*2*_fenotipo[0]));
-	}
-	public static double F2(double[] _fenotipo) {
-		return (-(_fenotipo[1]+47.0))*Math.sin(Math.sqrt(Math.abs(_fenotipo[1]+_fenotipo[0]/2.0+47.0)))- _fenotipo[0]*Math.sin(Math.sqrt(Math.abs(_fenotipo[0]-_fenotipo[1]-47.0)));
-	}
-	public static double F3(double[] _fenotipo) {
-		return 21.5 + _fenotipo[0]*Math.sin(4.0*Math.PI*_fenotipo[0]) + _fenotipo[1]*Math.sin(20.0*Math.PI*_fenotipo[1]);
-	}
-	public static double F4(double[] _fenotipo) {
-		double res1 = 0, res2 = 0;
-		for(int i = 1; i < 6; i++) {
-			res1 += i*Math.cos((i+1)*_fenotipo[0] + i);
-			res2 += i*Math.cos((i+1)*_fenotipo[1] + i);
-		}
-		return res1 * res2;
-	}
-	public static double F5(double[] _fenotipo, int n) {
-		double res = 0;
-		for(int i = 0; i < n;i++) {
-			res += Math.sin(_fenotipo[i]) * Math.pow((Math.sin((i+1)*_fenotipo[i]*_fenotipo[i]/Math.PI)),20);
-		}
-		return res;
-	}*/
     public static void mutacionInsercion(double prob, int[] array) {
         Random r = new Random();
         boolean encontrado = false;
         double d;
         int letra = -1;
-        while (!encontrado && letra <= array.length) {
+        while (!encontrado && letra < array.length) {
             d = r.nextDouble();
             encontrado = (d <= prob);
             letra++;
@@ -107,10 +201,12 @@ public class Funciones {
                 encontrado = (array[i] == letra);
                 i += encontrado ? 0 : 1;
             }
+            if (encontrado) {
             if (posnueva < i) {
                 rotar(posnueva, i, array);
             } else {
                 rotar(i, posnueva, array);
+            }
             }
         }
     }
@@ -122,12 +218,12 @@ public class Funciones {
         int a;
         int b = -1;
 
-        while (!encontrado && b <= array.length) {
+        while (!encontrado && b < array.length) {
             d = r.nextDouble();
             encontrado = (d <= prob);
             b++;
         }
-        if (encontrado) {
+        if (encontrado && b < array.length) {
             a = r.nextInt(array.length);
             int tmp = array[a];
             array[a] = array[b];
@@ -155,7 +251,7 @@ public class Funciones {
         }
     }
 
-    public static void mutacionHeuristica(double prob, int[] array, Cromosoma cromosoma,String texto, HashMap<String,Integer> map) {
+    public static void mutacionHeuristica(double prob, int[] array, Cromosoma cromosoma,String texto, HashMap<String,Double> map) {
         
         Random r = new Random();
         double d;
@@ -325,8 +421,8 @@ public class Funciones {
  /*si es mayor la guardamos y actualizamos array con sub;*/
         }
     }
-
-    public static HashMap<String, Integer> initializeFrecuencies() {
+/*
+    public static HashMap<String, Double> initializeFrecuencies() {
         HashMap<String, Integer> frequencies = new HashMap<String, Integer>();
         
         frequencies.put("AA", 1);
@@ -1106,4 +1202,5 @@ public class Funciones {
 
         return frequencies;
     }
+    */
 }
