@@ -8,8 +8,6 @@ public class Main {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-                CromosomaCruceCiclos a = new CromosomaCruceCiclos();
-                a.mutacion(0.6, "INSERCION", "", null);
 		/*int gen = 100;
 		Solucion sol = new Solucion(gen);
 		Vista p = new Vista();

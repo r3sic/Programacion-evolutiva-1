@@ -128,7 +128,7 @@ public class Vista extends JFrame {
 					    "Cruce",							 // etiqueta 
 					    "Elegir forma cruce", 					 // tooltip
 					    "_ejercicio",   							 // campo (debe haber un getColor y un setColor)
-					    new String[] {"CICLOS","CODORDINAL","OX","PMX"}))
+					    new String[] {"CICLOS","CODORDINAL","OX","PMX","ULX"}))
 			  .addOption(new ChoiceOption<AGenetico>(	 // -- eleccion de objeto no-configurable
 					    "Mutacion",							 // etiqueta 
 					    "Elegir mutacion", 					 // tooltip

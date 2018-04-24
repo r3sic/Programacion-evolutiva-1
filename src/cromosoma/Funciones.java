@@ -149,7 +149,7 @@ public class Funciones {
         int i = 0;
         
         for(Map.Entry<String, Double> entrada : freq.entrySet()) {
-        	a = entrada.getValue();
+        	//a = entrada.getValue();
         	arr[i] = (mapfreq.containsKey(entrada.getKey()))?mapfreq.get(entrada.getKey()):0;
         	suma_total += arr[i];
         	i++;	
@@ -161,9 +161,22 @@ public class Funciones {
         for(Map.Entry<String, Double> entrada : freq.entrySet()) {
         	a = entrada.getValue();
         	b = (mapfreq.containsKey(entrada.getKey()))?mapfreq.get(entrada.getKey()):0;
+                b = Math.log(b);//opcion a, mira que tal
+                
         	//i++;
         	apt += Math.pow(a-b,2);
         }
+        /*
+        opcion b
+        apt = 1.0;
+        for(Map.Entry<String, Double> entrada : freq.entrySet()){
+            a = entrada.getValue();
+            b = (mapfreq.containsKey(entrada.getKey()))?mapfreq.get(entrada.getKey()):0;
+            apt -= beta*Math.abs(b-a);
+            //si usamos Bigramos Y trigramas -> con los trigramas en vez de multiplicarlo por beta hay que multiplicarlo por un gamma tal que beta+gamma=1
+            //bata y gamma es para darle mas enfasis en los bigramas o en los trigramas
+        }
+        */
         /*
         while (i < texto.length() - 3) {
             if (texto.charAt(i) == ' ') {
