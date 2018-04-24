@@ -6,15 +6,16 @@ public abstract class Cromosoma {
 	protected int[] _genes;
 	protected HashMap<Character, Character> _fenotipo;
 	protected int _longitud;
-    protected double _aptitud;
-    protected String _tipoCrom;
+        protected double _aptitud;
+        protected String _tipoCrom;
 	
         public Cromosoma(){
-        	_longitud = 26;
+            _longitud = 26;
             _genes = new int[_longitud];
             _fenotipo = new HashMap<Character, Character>();
             generaAleatorio();
-            fenotipo();            
+            fenotipo();
+            
         }
         public Cromosoma(Cromosoma crom){
             _genes = new int[crom._longitud];
@@ -22,6 +23,7 @@ public abstract class Cromosoma {
             System.arraycopy(crom._genes, 0, _genes, 0, _longitud);
             _fenotipo = new HashMap<Character, Character>();
             _fenotipo.putAll(crom._fenotipo);
+            _aptitud=crom._aptitud;
         }
         
 	public HashMap<Character, Character> fenotipo(){
@@ -56,27 +58,31 @@ public abstract class Cromosoma {
             }}
 	}
         
-	public void mutacion(double prob, String tipo, String texto, HashMap map) {
+	public boolean mutacion(double prob, String tipo, String texto, HashMap map) {
+            boolean cambio = false;
             switch(tipo){
                 case "INSERCION": 
-                    Funciones.mutacionInsercion(prob, _genes);
-                    break;
+                    cambio= Funciones.mutacionInsercion(prob, _genes);
+                    
                 case "INTERCAMBIO": 
-                    Funciones.mutacionIntercambio(prob, _genes);
-                    break;
+                    cambio= Funciones.mutacionIntercambio(prob, _genes);
+                    
                 case "INVERSION": 
-                    Funciones.mutacionInversion(prob, _genes);
-                    break;
+                    cambio= Funciones.mutacionInversion(prob, _genes);
+                    
                 case "SHUFFLE": 
-                    Funciones.mutacionShuffle(prob, _genes);
-                    break;
+                    cambio= Funciones.mutacionShuffle(prob, _genes);
+                    
                 case "HEURISTICA": 
-                    Funciones.mutacionHeuristica(prob, _genes, this, texto,map);
-                    break;
+                    cambio= Funciones.mutacionHeuristica(prob, _genes, this, texto,map);
+                    
                 default:
-                    Funciones.mutacionInsercion(prob, _genes);
-                    break;
+                    cambio= Funciones.mutacionInsercion(prob, _genes);
+                    
             }
+            if(cambio)
+                fenotipo();
+            return cambio;
 	}
 	public abstract void cruce(Cromosoma c2) ;
         
@@ -84,5 +90,8 @@ public abstract class Cromosoma {
             return _fenotipo;
         }
         
+    public void setGenes(int[] _genes) {
+        this._genes = _genes;
+    }
         
 }

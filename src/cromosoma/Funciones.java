@@ -183,9 +183,9 @@ public class Funciones {
         }*/
         return -apt;
     }
-    public static void mutacionInsercion(double prob, int[] array) {
+    public static boolean mutacionInsercion(double prob, int[] array) {
         Random r = new Random();
-        boolean encontrado = false;
+        boolean encontrado = false,ret= false;
         double d;
         int letra = -1;
         while (!encontrado && letra < array.length) {
@@ -194,6 +194,7 @@ public class Funciones {
             letra++;
         }
         if (encontrado) {
+            ret=true;
             int posnueva = r.nextInt(array.length);
             encontrado = false;
             int i = 0;
@@ -208,10 +209,12 @@ public class Funciones {
                 rotar(i, posnueva, array);
             }
             }
+            
         }
+        return encontrado;
     }
 
-    public static void mutacionIntercambio(double prob, int[] array) {
+    public static boolean mutacionIntercambio(double prob, int[] array) {
         Random r = new Random();
         boolean encontrado = false;
         double d;
@@ -229,9 +232,10 @@ public class Funciones {
             array[a] = array[b];
             array[b] = tmp;
         }
+        return encontrado;
     }
 
-    public static void mutacionInversion(double prob, int[] array) {
+    public static boolean mutacionInversion(double prob, int[] array) {
         Random r = new Random();
         double d;
         boolean encontrado = false;
@@ -249,9 +253,10 @@ public class Funciones {
                 invertir(i, j, array);
             }
         }
+        return encontrado;
     }
 
-    public static void mutacionHeuristica(double prob, int[] array, Cromosoma cromosoma,String texto, HashMap<String,Double> map) {
+    public static boolean mutacionHeuristica(double prob, int[] array, Cromosoma cromosoma,String texto, HashMap<String,Double> map) {
         
         Random r = new Random();
         double d;
@@ -346,12 +351,13 @@ public class Funciones {
             }
             cromosoma=CromMejor;
             
-            /*a completar*/
+            
         }
+        return encontrado;
     }
     
     
-    public static void mutacionShuffle(double prob, int[] array) {
+    public static boolean mutacionShuffle(double prob, int[] array) {
         Random r = new Random();
         double d;
         boolean encontrado = false;
@@ -369,6 +375,7 @@ public class Funciones {
                 shuffle(i, j, array);
             }
         }
+        return encontrado;
     }
 
     private static void shuffle(int ini, int fin, int[] array) {

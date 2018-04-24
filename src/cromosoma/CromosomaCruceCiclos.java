@@ -62,6 +62,9 @@ public class CromosomaCruceCiclos extends Cromosoma{
         
         _genes = newCrom1;
         c2._genes = newCrom2;
+        fenotipo();
+        c2.fenotipo();
+        
         
     }
     
