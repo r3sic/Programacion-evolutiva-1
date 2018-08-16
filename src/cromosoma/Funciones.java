@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.StringTokenizer;
 
 public class Funciones {
 
@@ -104,6 +105,26 @@ public class Funciones {
         return trad;
     }
 
+    public static HashMap<String, Double> IncicFreqDig(String trad){
+        HashMap<String, Double> freq = new HashMap();
+        String aux1,aux2;
+        int i=0,f =2;
+        StringTokenizer st = new StringTokenizer(trad);
+        while (st.hasMoreTokens()){
+            aux1=st.nextToken();
+            while(f<aux1.length()){
+                aux2=aux1.substring(i, f);
+                if(!freq.containsKey(aux2))
+                    freq.put(aux2, 1.0);
+                else
+                    freq.put(aux2, freq.get(aux2)+1);
+                i++;
+                f++;
+            }
+        }
+        return freq;
+    }
+    
     public static HashMap<String, Double> InicFreq(String trad, HashMap<String,Double> mapa_t){
         HashMap<String, Double> freq = new HashMap<String, Double>();
         String aux = "";
@@ -115,7 +136,7 @@ public class Funciones {
 	                freq.put(aux.toUpperCase(), 1.0/(trad.length()));
 	            else
 	                freq.replace(aux.toUpperCase(), (freq.get(aux.toUpperCase())+(1.0/(trad.length()))));
-	            i = i+2;
+	            i++;
             }
             else
             	i++;
@@ -127,7 +148,7 @@ public class Funciones {
 	                freq.put(aux.toUpperCase(), 1.0/(trad.length()));
 	            else
 	                freq.replace(aux.toUpperCase(), (freq.get(aux.toUpperCase())+(1.0/(trad.length()))));
-	            i = i+3;
+	            i++;
             }
             else
             	i++;
@@ -136,8 +157,21 @@ public class Funciones {
         return freq;
     }
     
-    
-    public static double aptitud(HashMap<Character, Character> _fenotipo, String texto, HashMap<String, Double> mapfreq) {
+    public static double aptitud(HashMap<Character, Character> _fenotipo, String texto,HashMap<String, Double> mapDig ){
+        String trad = "";
+        trad = traduccion(_fenotipo, texto);
+        HashMap<String, Double> freq = IncicFreqDig(trad);
+        double apt=0.0;
+        double Fp,Ft;
+        for(Map.Entry<String,Double> entrada : freq.entrySet()){
+            Fp=freq.get(entrada.getKey());
+            Ft=mapDig.get(entrada.getKey());
+            Ft = Math.log(Ft);
+            apt +=apt+(Fp*Ft);
+        }
+        return apt;
+    }
+    /*public static double aptitud(HashMap<Character, Character> _fenotipo, String texto, HashMap<String, Double> mapfreq) {
         
         String trad = "";
         trad = traduccion(_fenotipo, texto);
@@ -157,7 +191,7 @@ public class Funciones {
         for(int j = 0; j < i; j++) {
         	arr[j] /= suma_total;
         }*/
-        i = 0;
+        /*i = 0;
         for(Map.Entry<String, Double> entrada : freq.entrySet()) {
         	a = entrada.getValue();
         	b = (mapfreq.containsKey(entrada.getKey()))?mapfreq.get(entrada.getKey()):0;
@@ -165,7 +199,7 @@ public class Funciones {
                 
         	//i++;
         	apt += Math.pow(a-b,2);
-        }
+        }*/
         /*
         opcion b
         apt = 1.0;
@@ -193,9 +227,9 @@ public class Funciones {
             apt += Math.pow(a-b, 2); //Cuando el hassMap de traduccion de frecuencias de digramas descomentar y terminar,tal vez dar la vuelta a la resta                
             i=i+2;
             }
-        }*/
+        }*//*
         return -apt;
-    }
+    }*/
     public static boolean mutacionInsercion(double prob, int[] array) {
         Random r = new Random();
         boolean encontrado = false,ret= false;
