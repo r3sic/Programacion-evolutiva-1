@@ -112,7 +112,7 @@ public class Funciones {
         StringTokenizer st = new StringTokenizer(trad);
         while (st.hasMoreTokens()){
             aux1=st.nextToken();
-            while(f<aux1.length()){
+            while(f<=aux1.length()){
                 aux2=aux1.substring(i, f);
                 if(!freq.containsKey(aux2))
                     freq.put(aux2, 1.0);
@@ -121,6 +121,8 @@ public class Funciones {
                 i++;
                 f++;
             }
+            i=0;
+            f=2;
         }
         return freq;
     }
@@ -157,6 +159,13 @@ public class Funciones {
         return freq;
     }
     
+    /**
+     * 
+     * @param _fenotipo -> el fenotipo del cromosoma
+     * @param texto -> el texto a traducir
+     * @param mapDig -> el mapa con los digramas y su aparicion en el ingles. estoy suponiendo que el double del map no son valores alrederor del 1.0 si no 300 o valores altos en general
+     * @return 
+     */
     public static double aptitud(HashMap<Character, Character> _fenotipo, String texto,HashMap<String, Double> mapDig ){
         String trad = "";
         trad = traduccion(_fenotipo, texto);
@@ -165,9 +174,9 @@ public class Funciones {
         double Fp,Ft;
         for(Map.Entry<String,Double> entrada : freq.entrySet()){
             Fp=freq.get(entrada.getKey());
-            Ft=mapDig.get(entrada.getKey());
+            Ft=mapDig.containsKey(entrada.getKey().toLowerCase())?mapDig.get(entrada.getKey().toLowerCase()):1.0;//si el map de digramas esta con minusculas va bien, si no, cambier los toLowerCase a toUperCase
             Ft = Math.log(Ft);
-            apt +=apt+(Fp*Ft);
+            apt +=(Fp*Ft);
         }
         return apt;
     }
